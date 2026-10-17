@@ -115,6 +115,64 @@ Errors: `400 invalid_request` (name rules), `400 organization_not_found` (not a 
 
 ---
 
+## Listings, photos and the campus feed
+
+Shared schemas/types: [`lib/contracts/listings.ts`](../lib/contracts/listings.ts) (`LISTING_TAGS`, `LISTING_SIZES`,
+`LISTING_CONDITIONS`, request schemas, response types). Every route below needs the Bearer token.
+
+**Selling flow:** create a draft → upload 1–6 photos → `PATCH { "status": "active" }` to publish.
+
+- Prices are **whole cents**, $1.00–$1,000.00 (`priceCents: 4500` = $45).
+- Tags: `rush`, `bid_day`, `gameday`, `formal`. Sizes: `XXS`–`XXL`, `0`–`14`, `ONE_SIZE`.
+  Conditions: `new_with_tags`, `like_new`, `good`, `fair`.
+- Statuses: `draft` (only the seller sees it) → `active` (campus feed) → `reserved` / `sold` (set by checkout, Phase 3)
+  or `removed`. The client can only set `active`, `draft` or `removed`.
+- Photo URLs are **signed and expire after ~10 minutes**. Re-fetch the listing/feed instead of caching them.
+- Everything is campus-locked: another school's listing is a `404`, even by ID.
+
+### `GET /api/listings` — campus feed
+Query: `tag`, `size`, `minPriceCents`, `maxPriceCents`, `limit` (1–48, default 24), `cursor`.
+```json
+{ "listings": [ { "id": "uuid", "title": "Gameday overalls", "priceCents": 4500, "size": "S", "condition": "like_new",
+                  "tags": ["gameday"], "brand": null, "status": "active", "publishedAt": "...",
+                  "coverUrl": "https://...signed...", "seller": { "id": "uuid", "displayName": "Jamie" } } ],
+  "nextCursor": "opaque-string-or-null" }
+```
+Next page: same query plus `cursor=<nextCursor>`. `null` means the end.
+
+### `POST /api/listings` — create a draft
+```json
+{ "title": "Crimson rush dress", "description": "Worn once", "brand": "Lulus",
+  "priceCents": 4500, "size": "S", "condition": "like_new", "tags": ["rush"] }
+```
+`201` → `{ "listing": ListingDetail }`. Errors: `400 invalid_request`, `429 rate_limited` (20/hour).
+
+### `GET /api/listings/:id`
+`200` → `{ "listing": ListingDetail }` (adds `description`, `photos[]`, `isOwner`, `createdAt`, `updatedAt`). `404 listing_not_found`.
+
+### `PATCH /api/listings/:id` — seller only
+Any subset of the create fields, plus `status`: `"active"` (publish), `"draft"` (unpublish) or `"removed"`.
+Errors: `404 listing_not_found` (not yours), `409 listing_needs_photo`, `409 listing_locked` (reserved/sold/removed).
+
+### `POST /api/listings/:id/media` — upload one photo (seller only)
+`multipart/form-data` with the file in field **`photo`**. JPEG, PNG or WebP, max **4 MB**, max **6 per listing**.
+The server re-encodes it to WebP (max 1600px) and **strips all metadata, including GPS location**.
+```js
+const form = new FormData();
+form.append("photo", file);
+await fetch(`${API}/api/listings/${id}/media`, { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form });
+```
+`201` → `{ "photo": { "id", "position", "url", "width", "height" } }`.
+Errors: `400 invalid_image`, `413 photo_too_large`, `409 too_many_photos`, `429 rate_limited` (60/hour).
+
+### `DELETE /api/listings/:id/media/:photoId` — seller only
+`200 { "ok": true }`. `409 listing_needs_photo` if it's the last photo of a published listing.
+
+### `GET /api/me/listings`
+The caller's listings, drafts included: `{ "listings": ListingSummary[] }`.
+
+---
+
 ## Testing without the product UI
 
 `http://localhost:3000/dev` is a bare click-through of the whole flow (hidden on the production deployment).
