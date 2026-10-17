@@ -11,6 +11,7 @@ import {
   type ListingDetail,
   type ListingSummary,
 } from "@/lib/contracts/listings";
+import type { HandoffTokenResponse, Order, OrdersResponse } from "@/lib/contracts/orders";
 
 type Turnstile = {
   render: (el: HTMLElement, opts: { sitekey: string; callback: (token: string) => void; "expired-callback": () => void }) => string;
@@ -41,6 +42,9 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [feed, setFeed] = useState<ListingSummary[]>([]);
   const [feedTag, setFeedTag] = useState("");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [qr, setQr] = useState<Record<string, string>>({});
+  const [scanned, setScanned] = useState("");
   const widgetRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
@@ -163,6 +167,37 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
     if (r.ok) setFeed((r.body as FeedResponse).listings);
   }
 
+  async function loadOrders() {
+    if (!session) return;
+    const r = await call("orders", "/api/orders", { token: session.accessToken });
+    if (r.ok) setOrders((r.body as OrdersResponse).orders);
+  }
+
+  async function buy(listingId: string) {
+    if (!session) return;
+    await call("checkout", "/api/checkout", { method: "POST", token: session.accessToken, body: { listingId } });
+    await Promise.all([loadFeed(), loadOrders()]);
+  }
+
+  async function showQr(orderId: string) {
+    if (!session) return;
+    const r = await call("handoff token", `/api/orders/${orderId}/handoff-token`, { method: "POST", token: session.accessToken });
+    if (r.ok) setQr((q) => ({ ...q, [orderId]: (r.body as HandoffTokenResponse).qrPayload }));
+  }
+
+  async function confirmHandoff() {
+    if (!session) return;
+    await call("confirm handoff", "/api/handoffs/confirm", { method: "POST", token: session.accessToken, body: { token: scanned } });
+    setScanned("");
+    await loadOrders();
+  }
+
+  async function cancelOrder(orderId: string) {
+    if (!session) return;
+    await call("cancel order", `/api/orders/${orderId}/cancel`, { method: "POST", token: session.accessToken });
+    await loadOrders();
+  }
+
   async function logout() {
     if (!session) return;
     await call("logout", "/api/auth/logout", { method: "POST", token: session.accessToken });
@@ -281,9 +316,28 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
                 <br />${(l.priceCents / 100).toFixed(2)} · {l.size}
                 <br /><small>{l.seller.displayName ?? "Student"}</small>
               </div>
+              <button onClick={() => buy(l.id)} style={{ marginTop: 4, width: "100%" }}>Buy</button>
             </div>
           ))}
         </div>
+      </section>
+
+      <section style={box}>
+        <h2>7. Orders + meetup handoff</h2>
+        <p><small>Payments aren&apos;t a feature yet: the buyer pays in person. The buyer shows a one-time QR code; the seller scans (pastes) it to complete the sale.</small></p>
+        <button onClick={loadOrders} disabled={!session}>Load my orders</button>
+        <ul>
+          {orders.map((o) => (
+            <li key={o.id} style={{ marginBottom: 8 }}>
+              <strong>{o.listing?.title ?? "Listing"}</strong> · {o.role} · ${(o.totalCents / 100).toFixed(2)} · <em>{o.status}</em>{" "}
+              {o.status === "pending_meetup" && o.role === "buyer" && <button onClick={() => showQr(o.id)}>Show QR</button>}{" "}
+              {o.status === "pending_meetup" && <button onClick={() => cancelOrder(o.id)}>Cancel</button>}
+              {qr[o.id] && <pre style={{ fontSize: 11, whiteSpace: "pre-wrap", background: "#f4f4f4", padding: 6 }}>{qr[o.id]}</pre>}
+            </li>
+          ))}
+        </ul>
+        <input style={input} placeholder="Seller: paste the buyer's QR value" value={scanned} onChange={(e) => setScanned(e.target.value)} />
+        <button onClick={confirmHandoff} disabled={!session || scanned.length < 20}>Confirm handoff</button>
       </section>
 
       <section style={box}>

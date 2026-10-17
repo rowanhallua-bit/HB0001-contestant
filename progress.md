@@ -97,13 +97,14 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [ ] `POST /api/ai-listing` — deferred (no Anthropic key)
 - [ ] Seed listings from Rowan's sheet — waiting on the sheet
 
-### Phase 3 — Buy + QR handoff — **SKIPPED for the demo/pilot** (see decisions log)
-Frontend Buy button shows "Payments aren't available yet". The items below stay as the post-pilot plan.
-- [ ] Migration 003: `orders`, `inventory_reservations`, `payment_events`, `handoff_tokens`
-- [ ] `POST /api/checkout` — server price + buyer fee (5% + $0.50), atomic reservation, Stripe sandbox Checkout (or clearly-labeled mock)
-- [ ] `POST /api/stripe/webhook` — signature check, idempotent by event ID
-- [ ] `POST /api/orders/:id/handoff-token`, `POST /api/handoffs/confirm` — one-time, seller-only, emits Cup event once
-- [ ] Chapter closet access codes (hashed, rate-limited) + drops with per-size stock
+### Phase 3 — Buy + QR handoff — **light pilot version, no payments, nothing external connected**
+- [~] Migration 003 written (`supabase/migrations/20261017153000_orders_and_handoffs.sql`): `orders`, `private.handoff_tokens` (hashes only), locked state-change functions (`create_order`, `create_handoff_token`, `confirm_handoff`, `cancel_order`), RLS buyer/seller-only. **Rouan: paste into the SQL editor**
+- [x] `POST /api/checkout` — reserves the listing atomically; server price + display-only buyer fee (5% + $0.50); `payment.collected: false` with the "pay in person" notice
+- [x] `GET /api/orders`, `POST /api/orders/:id/cancel` (listing goes back on the feed)
+- [x] `POST /api/orders/:id/handoff-token` (buyer, single use, 15 min, older tokens revoked), `POST /api/handoffs/confirm` (seller only) → order completed, listing sold
+- [x] `/dev` Buy buttons + Orders/handoff section; `docs/API.md` checkout section; `lib/contracts/orders.ts`
+- [~] Order security tests written (`tests/security/orders.test.mjs`) — run after migration 003
+- [ ] Post-pilot: Stripe Checkout + webhook, chapter closet access codes + drops
 
 ### Phase 4 — Closet Cup & polish (3:00–4:00)
 - [ ] `cup_events` + sanitized aggregate `GET /api/cup` (campus view + SEC view)
@@ -123,7 +124,7 @@ Frontend Buy button shows "Payments aren't available yet". The items below stay 
 - **2026-10-17** — One Supabase project for today (hackathon). Demo login gated by `DEMO_MODE` and off in production.
 
 - **2026-10-17** — Vercel hosting on hold (plan doesn't support collaborative projects). Develop and test on `localhost:3000`; GitHub is for code only.
-- **2026-10-17** — Phase 3 (payments, checkout, QR handoff) is out of scope for the demo/pilot. No Stripe. The frontend's checkout shows a "payments aren't a feature yet" message; no backend endpoint. Proposed for Phase 4: seller "Mark as sold" after the in-person swap, which feeds the Closet Cup (pending Rouan's OK).
+- **2026-10-17** — Phases 3–5 are built "light": no API keys, no external services (no Stripe, no AI, no deploy). Phase 3 = pilot checkout that reserves the item and completes via a one-time QR handoff at the meetup; no money moves, every order says "pay in person". The QR handoff replaces a manual "Mark as sold", so sellers can't fake sales for Closet Cup points.
 - **2026-10-17** — Local Node 22 on Rouan's machine via fnm + `node22.cmd` launcher (system Node 12 can't be removed without admin).
 
 ## Blockers / waiting on Rouan

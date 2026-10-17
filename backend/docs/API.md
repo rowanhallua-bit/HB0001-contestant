@@ -173,6 +173,35 @@ The caller's listings, drafts included: `{ "listings": ListingSummary[] }`.
 
 ---
 
+## Checkout, orders and the meetup handoff (pilot: no payments)
+
+Shared types: [`lib/contracts/orders.ts`](../lib/contracts/orders.ts). **No money is collected.** Every order has
+`payment: { collected: false, message: "Payments aren't available yet. Pay the seller in person at the meetup." }`
+(also exported as `PAYMENT_NOTICE`). Show that message on the Buy screen.
+
+**Flow:** Buy → listing becomes `reserved`, order `pending_meetup` → students meet on campus → buyer opens
+"Show QR" → seller scans it → order `completed`, listing `sold`. Either side can cancel before the meetup.
+
+### `POST /api/checkout`
+`{ "listingId": "uuid" }` → `201 { "order": Order }`. Price and the buyer fee (5% + $0.50, display only) come from the server.
+Errors: `404 listing_not_found` (incl. other campuses), `409 listing_unavailable` (already claimed), `409 cannot_buy_own_listing`.
+
+### `GET /api/orders`
+`{ "orders": Order[] }`: orders where you're the buyer or seller. `Order.role` is `"buyer"` or `"seller"`.
+
+### `POST /api/orders/:id/cancel`
+Buyer or seller, while `pending_meetup`. The listing goes back to `active`. `409 order_not_open` after completion.
+
+### `POST /api/orders/:id/handoff-token` (buyer only)
+`200 { "qrPayload": "bidd:handoff:...", "expiresAt": "..." }`. Render `qrPayload` as a QR code. It's single use,
+expires in 15 minutes, and asking again revokes the previous one.
+
+### `POST /api/handoffs/confirm` (seller only)
+`{ "token": "<scanned qrPayload>" }` → `200 { "ok": true, "orderId": "uuid" }`.
+Errors: `400 invalid_handoff` (bad token, or you're not this order's seller), `409 handoff_already_used`, `410 handoff_expired`.
+
+---
+
 ## Testing without the product UI
 
 `http://localhost:3000/dev` is a bare click-through of the whole flow (hidden on the production deployment).
