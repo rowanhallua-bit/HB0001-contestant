@@ -1,0 +1,107 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-17T16:45:19.985Z",
+        "reason": "model decision: throwaway decision-round skeleton sketch, not shipping UI; the page renders it as bars"
+      },
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-17T16:45:20.196Z",
+        "reason": "model decision: throwaway decision-round skeleton sketch, not shipping UI; the page renders it as bars"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-17T16:45:20.406Z",
+        "reason": "model decision: throwaway decision-round skeleton sketch, not shipping UI; the page renders it as bars"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "brand/index.html"
+        ],
+        "createdAt": "2026-10-17T17:10:49.190Z",
+        "reason": "model decision: false positive on .band sections whose side padding is max(clamp(16px,4vw,56px), env(safe-area-inset-*)) plus padding-block; renders at 1440 and 390 (.impeccable/review/sections) show 60px and 16px gutters"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-17T17:23:44.435Z",
+        "reason": "model decision: throwaway decision-round sketches, not shipping UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-17T17:23:44.630Z",
+        "reason": "model decision: throwaway decision-round sketches, not shipping UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-17T17:23:44.850Z",
+        "reason": "model decision: throwaway decision-round sketches, not shipping UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "brand/logo-lab.html"
+        ],
+        "createdAt": "2026-10-17T17:29:55.637Z",
+        "reason": "model decision: brand/logo-lab.html is a neutral exploration workbench for replacing the logo and type; it loads candidate fonts and uses its own UI chrome on purpose"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "brand/logo-lab.html"
+        ],
+        "createdAt": "2026-10-17T17:29:55.851Z",
+        "reason": "model decision: brand/logo-lab.html is a neutral exploration workbench for replacing the logo and type; it loads candidate fonts and uses its own UI chrome on purpose"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "brand/logo-lab.html"
+        ],
+        "createdAt": "2026-10-17T17:29:56.082Z",
+        "reason": "model decision: brand/logo-lab.html is a neutral exploration workbench for replacing the logo and type; it loads candidate fonts and uses its own UI chrome on purpose"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "brand/logo-lab.html"
+        ],
+        "createdAt": "2026-10-17T17:29:56.306Z",
+        "reason": "model decision: brand/logo-lab.html is a neutral exploration workbench for replacing the logo and type; it loads candidate fonts and uses its own UI chrome on purpose"
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440">
+<title>Sheet Banner sketch</title>
+<style>
+  html,body{margin:0;height:100%;background:#2a2622}
+  body{width:1440px;height:900px;overflow:hidden;font-family:"Arial Black",Impact,sans-serif;position:relative}
+  .rope{position:absolute;left:0;right:0;top:38px;height:6px;background:repeating-linear-gradient(90deg,#c9b48a 0 10px,#a8925f 10px 20px);transform:rotate(-.4deg)}
+  .sheet{position:absolute;left:60px;right:60px;top:44px;bottom:28px;background:#F5F5F2;
+    clip-path:polygon(0 0,100% 0,100% 97%,92% 100%,60% 98.5%,30% 100%,0 98%);
+    box-shadow:0 30px 60px rgba(0,0,0,.4)}
+  .crease{position:absolute;background:rgba(0,0,0,.06)}
+  .cv{top:0;bottom:0;width:2px}.ch{left:0;right:0;height:2px}
+  .tie{position:absolute;top:-14px;width:18px;height:40px;background:#a8925f;border-radius:4px}
+  nav{position:absolute;top:40px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:center;font-size:22px;letter-spacing:.04em;color:#0E0E0E}
+  nav span{margin-left:34px}
+  .mark{position:absolute;left:40px;top:120px}
+  .slogan{position:absolute;left:70px;top:610px;font-size:92px;color:#0E0E0E;transform:rotate(-1.5deg);letter-spacing:-.01em}
+  .row{position:absolute;left:70px;right:70px;bottom:62px;display:flex;align-items:center;gap:22px}
+  .chip{font-size:24px;padding:16px 26px;border:5px solid #0E0E0E;color:#0E0E0E}
+  .chip.on{background:#9E1B32;color:#F5F5F2}
+  .cta{margin-left:auto;font-size:30px;background:#0E0E0E;color:#F5F5F2;padding:22px 40px;transform:rotate(1deg)}
+  .stamp{position:absolute;right:80px;top:150px;font-size:26px;color:#0E0E0E;border:5px solid #0E0E0E;padding:14px 20px;transform:rotate(4deg)}
+</style></head><body>
+<div class="rope"></div>
+<div class="sheet">
+  <div class="tie" style="left:40px"></div><div class="tie" style="right:40px"></div><div class="tie" style="left:50%"></div>
+  <div class="crease cv" style="left:33.3%"></div><div class="crease cv" style="left:66.6%"></div><div class="crease ch" style="top:50%"></div>
+  <nav><b>BIDD BRAND KIT</b><div><span>LOGO</span><span>COLOR</span><span>TYPE</span><span>VOICE</span><span>TEMPLATES</span></div></nav>
+  <svg class="mark" width="1240" height="500" viewBox="0 0 1240 500">
+    <text x="22" y="430" font-size="470" font-family="Arial Black,Impact" fill="#9E1B32" letter-spacing="-10">BIDD</text>
+    <text x="10" y="420" font-size="470" font-family="Arial Black,Impact" fill="none" stroke="#0E0E0E" stroke-width="16" stroke-linejoin="round" letter-spacing="-10">BIDD</text>
+  </svg>
+  <div class="stamp">FALL CUP · DAY 23</div>
+  <div class="slogan">Be 1 of 1.</div>
+  <div class="row"><div class="chip on">UA</div><div class="chip">OLE MISS</div><div class="chip">ANY CAMPUS</div><div class="cta">GET THE KIT</div></div>
+</div>
+</body></html>

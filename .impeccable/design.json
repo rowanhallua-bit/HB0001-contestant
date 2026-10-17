@@ -1,0 +1,564 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-17T18:19:06.093Z",
+  "title": "Design System: Bidd",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "canonical": "#0B0B0B",
+        "oklch": "oklch(15.0% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#FFFFFF",
+        "oklch": "oklch(100.0% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-50": {
+        "role": "neutral",
+        "displayName": "Gray 50",
+        "canonical": "#F5F5F5",
+        "oklch": "oklch(97.0% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-100": {
+        "role": "neutral",
+        "displayName": "Gray 100",
+        "canonical": "#EBEBEB",
+        "oklch": "oklch(94.0% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-200": {
+        "role": "neutral",
+        "displayName": "Gray 200",
+        "canonical": "#D9D9D9",
+        "oklch": "oklch(88.5% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-400": {
+        "role": "neutral",
+        "displayName": "Gray 400",
+        "canonical": "#9E9E9E",
+        "oklch": "oklch(69.9% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-600": {
+        "role": "neutral",
+        "displayName": "Gray 600",
+        "canonical": "#6B6B6B",
+        "oklch": "oklch(52.8% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "gray-800": {
+        "role": "neutral",
+        "displayName": "Gray 800",
+        "canonical": "#262626",
+        "oklch": "oklch(26.9% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Dim (muted on ink)",
+        "canonical": "#A3A3A3",
+        "oklch": "oklch(71.5% 0 0)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "campus-alabama": {
+        "role": "tenant",
+        "displayName": "Alabama Crimson (campus)",
+        "canonical": "#9E1B32",
+        "oklch": "oklch(45.7% 0.164 18.1)",
+        "tonalRamp": [
+          "#200003",
+          "#4A000F",
+          "#7C001F",
+          "#A62538",
+          "#D04E5A",
+          "#FA747D",
+          "#FDB5B6",
+          "#FFE8E8"
+        ]
+      },
+      "campus-alabama-line": {
+        "role": "tenant",
+        "displayName": "Alabama 1 on White",
+        "canonical": "#9E1B32",
+        "oklch": "oklch(45.7% 0.164 18.1)",
+        "tonalRamp": [
+          "#200003",
+          "#4A000F",
+          "#7C001F",
+          "#A62538",
+          "#D04E5A",
+          "#FA747D",
+          "#FDB5B6",
+          "#FFE8E8"
+        ]
+      },
+      "campus-alabama-on-dark": {
+        "role": "tenant",
+        "displayName": "Alabama 1 on Black",
+        "canonical": "#B33242",
+        "oklch": "oklch(51.7% 0.165 18.3)",
+        "tonalRamp": [
+          "#200003",
+          "#4A000F",
+          "#7A0520",
+          "#A62438",
+          "#D04D59",
+          "#FA747C",
+          "#FDB5B5",
+          "#FFE8E8"
+        ]
+      },
+      "campus-alabama-2": {
+        "role": "tenant",
+        "displayName": "Alabama Secondary Grey",
+        "canonical": "#828A8F",
+        "oklch": "oklch(62.8% 0.012 234.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#6B6B6B",
+          "#9E9E9E",
+          "#D9D9D9",
+          "#EBEBEB",
+          "#F5F5F5",
+          "#FFFFFF"
+        ]
+      },
+      "campus-olemiss": {
+        "role": "tenant",
+        "displayName": "Ole Miss Navy (campus)",
+        "canonical": "#14213D",
+        "oklch": "oklch(25.2% 0.056 264.0)",
+        "tonalRamp": [
+          "#020922",
+          "#16233F",
+          "#303F5E",
+          "#4D5D7E",
+          "#6F80A3",
+          "#93A5C9",
+          "#B8CBF0",
+          "#E7EFFD"
+        ]
+      },
+      "campus-olemiss-line": {
+        "role": "tenant",
+        "displayName": "Ole Miss 1 on White (lifted blue)",
+        "canonical": "#274A9C",
+        "oklch": "oklch(43.2% 0.140 264.0)",
+        "tonalRamp": [
+          "#000038",
+          "#011666",
+          "#173888",
+          "#3458AC",
+          "#557CD3",
+          "#77A2FC",
+          "#B2CBFC",
+          "#E8EFFC"
+        ]
+      },
+      "campus-olemiss-on-dark": {
+        "role": "tenant",
+        "displayName": "Ole Miss 1 on Black",
+        "canonical": "#375CB0",
+        "oklch": "oklch(49.3% 0.140 264.1)",
+        "tonalRamp": [
+          "#000036",
+          "#011666",
+          "#173888",
+          "#3458AC",
+          "#547CD3",
+          "#77A2FC",
+          "#B2CBFD",
+          "#E8EFFD"
+        ]
+      },
+      "campus-olemiss-2": {
+        "role": "tenant",
+        "displayName": "Ole Miss Secondary Red",
+        "canonical": "#CE1126",
+        "oklch": "oklch(54.1% 0.213 24.8)",
+        "tonalRamp": [
+          "#210000",
+          "#4C0005",
+          "#7C0311",
+          "#B1041D",
+          "#E33138",
+          "#FE726C",
+          "#FFB5AE",
+          "#FEE9E7"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-xl": {
+        "displayName": "Display XL",
+        "purpose": "Archivo Extra Condensed Black Italic caps at 96px: hero-scale headlines, drop banners, section heads at their max."
+      },
+      "display-l": {
+        "displayName": "Display L",
+        "purpose": "64px condensed black italic caps: card headlines, drop titles."
+      },
+      "display-m": {
+        "displayName": "Display M",
+        "purpose": "40px condensed black italic caps: countdown clocks, empty-state heads, Cup scores."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Hanken Grotesk 600: item titles and card headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Hanken Grotesk 400: all running text, about 60ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Hanken Grotesk 700 caps +0.06em: chips, tags, table heads, item meta."
+      },
+      "number": {
+        "displayName": "Number",
+        "purpose": "Hanken Grotesk 600 with tabular figures: prices, stock, timers."
+      }
+    },
+    "campusVariables": [
+      {
+        "name": "--campus",
+        "fallback": "var(--ink)",
+        "purpose": "The campus primary as given: large fields (drop banners, Cup bars, selected chips, selection)."
+      },
+      {
+        "name": "--campus-ink",
+        "fallback": "var(--paper)",
+        "purpose": "Text and controls on a --campus field: ink or paper, whichever contrasts more."
+      },
+      {
+        "name": "--campus-line",
+        "fallback": "var(--ink)",
+        "purpose": "Thin marks on white: the 1 in the logo, focus rings, links, caret. 3:1 on white, 0.3 OKLab from ink, chroma floor 0.14."
+      },
+      {
+        "name": "--campus-on-dark",
+        "fallback": "var(--paper)",
+        "purpose": "The 1 and any campus mark on black; focus rings under [data-ground=\"dark\"]. 3:1 on ink, 0.3 OKLab from paper."
+      },
+      {
+        "name": "--campus-2",
+        "fallback": "var(--gray-600)",
+        "purpose": "Secondary color: second chart series; supplies the 1 when the primary is black or grey."
+      }
+    ],
+    "focus": [
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid var(--campus-line); outline-offset: 3px",
+        "purpose": "Every :focus-visible on light grounds."
+      },
+      {
+        "name": "focus-ring-dark",
+        "value": "[data-ground=\"dark\"] :focus-visible { outline-color: var(--campus-on-dark) }",
+        "purpose": "Focus on black containers."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "dock-float",
+        "value": "0 12px 32px rgba(0, 0, 0, 0.28)",
+        "purpose": "The fixed campus dock only; everything else is flat."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state and repaint transitions."
+      },
+      {
+        "name": "pill-lift",
+        "value": "transform 0.4s ease-out-expo, translateY(-2px) on hover",
+        "purpose": "Pill hover; disabled under reduced motion."
+      },
+      {
+        "name": "campus-repaint",
+        "value": "0.5s ease-out-expo on background, color, fill, stroke, border; delay staggered by page position up to 700ms",
+        "purpose": "A campus switch repaints every fill in one sweep down the page."
+      },
+      {
+        "name": "one-stamp",
+        "value": "0.7s ease-out-expo, translateY(12%) scaleY(0.55) to none",
+        "purpose": "The hero 1 re-stamps in its new campus color."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "1080px"
+      },
+      {
+        "name": "sm",
+        "value": "760px"
+      },
+      {
+        "name": "xs",
+        "value": "400px"
+      }
+    ],
+    "templates": [
+      {
+        "name": "Instagram post (drop)",
+        "size": "1080x1350",
+        "file": "brand/templates/ig-drop.html"
+      },
+      {
+        "name": "Instagram story (Closet Cup)",
+        "size": "1080x1920",
+        "file": "brand/templates/story-cup.html"
+      },
+      {
+        "name": "Deck title",
+        "size": "1920x1080",
+        "file": "brand/templates/deck-title.html"
+      }
+    ],
+    "logo": {
+      "wordmark": "B1DD: Archivo Extra Condensed Black Italic (wdth 62, wght 900), outlined to vector; the I drawn as a 1 in the campus color; letters always ink or paper.",
+      "mark": "B1: app icon, favicon, anything under 64px wide; holds to 16px.",
+      "nameInText": "Bidd",
+      "clearSpace": "The width of the 1 on every side.",
+      "minimumSize": "Wordmark 64px wide; below that, the B1 mark.",
+      "files": [
+        "brand/logo/bidd-wordmark.svg",
+        "brand/logo/bidd-wordmark-white.svg",
+        "brand/logo/bidd-mark.svg",
+        "brand/logo/bidd-mark-white.svg",
+        "brand/logo/campus/",
+        "brand/react/bidd-logo.tsx",
+        "brand/icons/"
+      ]
+    }
+  },
+  "components": [
+    {
+      "name": "B1DD Wordmark",
+      "kind": "custom",
+      "refersTo": "logo",
+      "description": "The outlined B1DD wordmark: letters ink on white or paper on black, the 1 in --campus-line on white and --campus-on-dark on black.",
+      "html": "<div class=\"ds-logo-row\"><span class=\"ds-logo-light\"><svg viewBox=\"-5 -689 1894 689\" height=\"40\" role=\"img\" aria-label=\"Bidd\"><path style=\"fill: var(--ink)\" d=\"M-5 0L115 -688L362 -688Q412 -688 449 -672.5Q486 -657 506 -626Q526 -595 526 -549Q526 -498 507 -460.5Q488 -423 458 -398Q428 -373 394 -359L393 -355Q431 -339 456 -311.5Q481 -284 481 -228Q481 -160 448.5 -108.5Q416 -57 363 -28.5Q310 0 249 0ZM201 -160L249 -160Q260 -160 272 -168Q284 -176 292 -193.5Q300 -211 300 -238Q300 -255 292 -266.5Q284 -278 270 -278L222 -278ZM247 -420L289 -420Q298 -420 307 -424.5Q316 -429 323.5 -438.5Q331 -448 335.5 -462.5Q340 -477 340 -497Q340 -514 332 -525.5Q324 -537 310 -537L268 -537Z\"/><path style=\"fill: var(--campus-line)\" d=\"M466 0L489 -134L579 -134L638 -466L547 -466L567 -581Q590 -583 618 -593Q646 -603 675 -618Q704 -633 732 -651.5Q760 -670 782 -689L840 -689L742 -134L833 -134L810 0Z\"/><path style=\"fill: var(--ink)\" d=\"M864 0L984 -688L1200 -688Q1298 -688 1339 -641.5Q1380 -595 1380 -497Q1380 -463 1375.5 -423.5Q1371 -384 1363 -337Q1343 -223 1312.5 -148Q1282 -73 1230.5 -36.5Q1179 0 1095 0ZM1074 -158L1102 -158Q1117 -158 1127 -164.5Q1137 -171 1143.5 -185.5Q1150 -200 1154.5 -222.5Q1159 -245 1165 -276Q1179 -355 1186 -396.5Q1193 -438 1195.5 -457Q1198 -476 1198 -487Q1198 -501 1195 -510.5Q1192 -520 1185.5 -525Q1179 -530 1167 -530L1139 -530Z\"/><path style=\"fill: var(--ink)\" d=\"M1373 0L1493 -688L1709 -688Q1807 -688 1848 -641.5Q1889 -595 1889 -497Q1889 -463 1884.5 -423.5Q1880 -384 1872 -337Q1852 -223 1821.5 -148Q1791 -73 1739.5 -36.5Q1688 0 1604 0ZM1583 -158L1611 -158Q1626 -158 1636 -164.5Q1646 -171 1652.5 -185.5Q1659 -200 1663.5 -222.5Q1668 -245 1674 -276Q1688 -355 1695 -396.5Q1702 -438 1704.5 -457Q1707 -476 1707 -487Q1707 -501 1704 -510.5Q1701 -520 1694.5 -525Q1688 -530 1676 -530L1648 -530Z\"/></svg></span><span class=\"ds-logo-dark\"><svg viewBox=\"-5 -689 1894 689\" height=\"40\" role=\"img\" aria-label=\"Bidd\"><path style=\"fill: var(--paper)\" d=\"M-5 0L115 -688L362 -688Q412 -688 449 -672.5Q486 -657 506 -626Q526 -595 526 -549Q526 -498 507 -460.5Q488 -423 458 -398Q428 -373 394 -359L393 -355Q431 -339 456 -311.5Q481 -284 481 -228Q481 -160 448.5 -108.5Q416 -57 363 -28.5Q310 0 249 0ZM201 -160L249 -160Q260 -160 272 -168Q284 -176 292 -193.5Q300 -211 300 -238Q300 -255 292 -266.5Q284 -278 270 -278L222 -278ZM247 -420L289 -420Q298 -420 307 -424.5Q316 -429 323.5 -438.5Q331 -448 335.5 -462.5Q340 -477 340 -497Q340 -514 332 -525.5Q324 -537 310 -537L268 -537Z\"/><path style=\"fill: var(--campus-on-dark)\" d=\"M466 0L489 -134L579 -134L638 -466L547 -466L567 -581Q590 -583 618 -593Q646 -603 675 -618Q704 -633 732 -651.5Q760 -670 782 -689L840 -689L742 -134L833 -134L810 0Z\"/><path style=\"fill: var(--paper)\" d=\"M864 0L984 -688L1200 -688Q1298 -688 1339 -641.5Q1380 -595 1380 -497Q1380 -463 1375.5 -423.5Q1371 -384 1363 -337Q1343 -223 1312.5 -148Q1282 -73 1230.5 -36.5Q1179 0 1095 0ZM1074 -158L1102 -158Q1117 -158 1127 -164.5Q1137 -171 1143.5 -185.5Q1150 -200 1154.5 -222.5Q1159 -245 1165 -276Q1179 -355 1186 -396.5Q1193 -438 1195.5 -457Q1198 -476 1198 -487Q1198 -501 1195 -510.5Q1192 -520 1185.5 -525Q1179 -530 1167 -530L1139 -530Z\"/><path style=\"fill: var(--paper)\" d=\"M1373 0L1493 -688L1709 -688Q1807 -688 1848 -641.5Q1889 -595 1889 -497Q1889 -463 1884.5 -423.5Q1880 -384 1872 -337Q1852 -223 1821.5 -148Q1791 -73 1739.5 -36.5Q1688 0 1604 0ZM1583 -158L1611 -158Q1626 -158 1636 -164.5Q1646 -171 1652.5 -185.5Q1659 -200 1663.5 -222.5Q1668 -245 1674 -276Q1688 -355 1695 -396.5Q1702 -438 1704.5 -457Q1707 -476 1707 -487Q1707 -501 1704 -510.5Q1701 -520 1694.5 -525Q1688 -530 1676 -530L1648 -530Z\"/></svg></span></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-logo-row { display: flex; gap: 16px; } .ds-logo-light, .ds-logo-dark { display: grid; place-items: center; padding: 24px 32px; border-radius: 4px; } .ds-logo-light { background: var(--gray-50); } .ds-logo-dark { background: var(--ink); }"
+    },
+    {
+      "name": "Primary Pill",
+      "kind": "button",
+      "refersTo": "pill-ink",
+      "description": "The main action: a black pill. Campus is never its background.",
+      "html": "<button class=\"ds-pill ds-pill-ink\">Buy it</button>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-pill { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 14px 24px; font: 700 1rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; border: 2px solid transparent; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s; } .ds-pill:hover { transform: translateY(-2px); } .ds-pill:active { transform: translateY(0); } .ds-pill:focus-visible { outline: 2px solid var(--campus-line); outline-offset: 3px; } .ds-pill-ink { background: var(--ink); color: var(--paper); }"
+    },
+    {
+      "name": "Line Pill",
+      "kind": "button",
+      "refersTo": "pill-line",
+      "description": "Secondary action with a 2px ink border; disabled pills drop to gray 100 and gray 400.",
+      "html": "<div class=\"ds-row\"><button class=\"ds-pill ds-pill-line\">Save</button><button class=\"ds-pill ds-pill-off\" disabled>Sold</button></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-pill { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 14px 24px; font: 700 1rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; border: 2px solid transparent; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s; } .ds-pill:hover { transform: translateY(-2px); } .ds-pill:active { transform: translateY(0); } .ds-pill:focus-visible { outline: 2px solid var(--campus-line); outline-offset: 3px; } .ds-row { display: flex; gap: 10px; } .ds-pill-line { background: transparent; color: var(--ink); border-color: var(--ink); } .ds-pill-off { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; transform: none; }"
+    },
+    {
+      "name": "Moment Chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Pill chips in ink outline; the selected chip fills with --campus and --campus-ink text.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Rush</button><button class=\"ds-chip\" aria-pressed=\"false\">Bid Day</button><button class=\"ds-chip\" aria-pressed=\"false\">Gameday</button></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-chips { display: flex; gap: 8px; flex-wrap: wrap; } .ds-chip { border: 2px solid var(--ink); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 10px 16px; font: 700 0.8125rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: background-color 0.2s; } .ds-chip:hover { background: var(--gray-50); } .ds-chip[aria-pressed=\"true\"] { background: var(--campus); border-color: var(--campus); color: var(--campus-ink); } .ds-chip:focus-visible { outline: 2px solid var(--campus-line); outline-offset: 3px; }"
+    },
+    {
+      "name": "Drop Banner",
+      "kind": "card",
+      "refersTo": "drop-banner",
+      "description": "A campus field: display headline and countdown in --campus-ink, size pills and the pre-order pill flipped to --campus-ink fill with --campus text.",
+      "html": "<article class=\"ds-drop\"><h3 class=\"ds-display ds-drop-h\">Bid Day drop</h3><div class=\"ds-display ds-clock\">02:14:09</div><div class=\"ds-meta\"><span>48 of 120 left</span><span>Opens to members with the chapter code</span></div><div class=\"ds-sizes\"><button>XS</button><button aria-pressed=\"true\">S</button><button>M</button><button disabled>XL</button></div><button class=\"ds-on-field\">Pre-order size S</button></article>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-display { font-family: Archivo, 'Arial Narrow', ui-sans-serif, sans-serif; font-stretch: 62%; font-variation-settings: 'wdth' 62; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.86; letter-spacing: -0.01em; word-spacing: 0.14em; margin: 0; } .ds-drop { background: var(--campus); color: var(--campus-ink); border-radius: 4px; padding: 32px; display: grid; gap: 20px; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; } .ds-drop-h { font-size: 4rem; } .ds-clock { font-size: 2.5rem; font-variant-numeric: tabular-nums; } .ds-meta { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; } .ds-sizes { display: flex; gap: 8px; } .ds-sizes button { min-width: 52px; padding: 12px 10px; border-radius: 999px; border: 2px solid currentColor; background: transparent; color: inherit; font: 700 0.875rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; cursor: pointer; } .ds-sizes button[aria-pressed=\"true\"] { background: var(--campus-ink); border-color: var(--campus-ink); color: var(--campus); } .ds-sizes button:disabled { opacity: 0.4; text-decoration: line-through; cursor: not-allowed; } .ds-on-field { justify-self: start; background: var(--campus-ink); color: var(--campus); border: 0; border-radius: 999px; padding: 14px 24px; font: 700 1rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); } .ds-on-field:hover { transform: translateY(-2px); } .ds-drop button:focus-visible { outline: 2px solid var(--campus-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Closet Cup Bars",
+      "kind": "custom",
+      "refersTo": "cup-bar",
+      "description": "Leaderboard bars squared at the start and pill-ended, scores in display numerals; each campus bar wears its own campus.",
+      "html": "<div class=\"ds-cup\"><div class=\"ds-row\"><div class=\"ds-m\"><span>Alabama</span><span class=\"ds-n\">412</span></div><div class=\"ds-bar\" style=\"width:100%;background:#9E1B32\"></div></div><div class=\"ds-row\"><div class=\"ds-m\"><span>Ole Miss</span><span class=\"ds-n\">388</span></div><div class=\"ds-bar\" style=\"width:94%;background:#14213D\"></div></div></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-cup { display: grid; gap: 18px; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; color: var(--ink); } .ds-row { display: grid; gap: 8px; } .ds-m { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; } .ds-n { font-family: Archivo, 'Arial Narrow', ui-sans-serif, sans-serif; font-stretch: 62%; font-variation-settings: 'wdth' 62; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.86; letter-spacing: -0.01em; word-spacing: 0.14em; font-size: 2rem; font-variant-numeric: tabular-nums; } .ds-bar { height: 28px; border-radius: 0 999px 999px 0; }"
+    },
+    {
+      "name": "Listing Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "4px content card with a square photo slot, Hanken title, tabular price and the campus season stamp.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-photo\" role=\"img\" aria-label=\"Photo slot\">Listing photo: square, full garment, daylight.</div><div class=\"ds-body\"><p class=\"ds-title\">Sequin mini, worn once</p><p class=\"ds-meta\">Size S · Like new · Formal</p><span class=\"ds-price\">$38</span><span class=\"ds-stamp\"><i></i>Fall Cup · day 23</span></div></article>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-card { display: grid; grid-template-columns: 160px 1fr; gap: 20px; border: 1px solid var(--gray-100); border-radius: 4px; padding: 24px; background: var(--paper); color: var(--ink); font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; } .ds-photo { aspect-ratio: 1; background: var(--gray-50); box-shadow: inset 0 0 0 1px var(--gray-200); display: flex; align-items: flex-end; padding: 12px; font-size: 0.75rem; line-height: 1.35; color: var(--gray-600); } .ds-body { display: grid; gap: 8px; align-content: start; } .ds-title { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.2; } .ds-meta { margin: 0; color: var(--gray-600); } .ds-price { font-size: 2.5rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; } .ds-stamp { justify-self: start; display: inline-flex; gap: 8px; align-items: center; border: 1.5px solid var(--ink); border-radius: 999px; padding: 6px 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; } .ds-stamp i { width: 8px; height: 8px; border-radius: 50%; background: var(--campus-line); }"
+    },
+    {
+      "name": "Access Code Input",
+      "kind": "input",
+      "refersTo": "code-box",
+      "description": "One box per character; focus turns the border --campus-line; errors are ink with the alert icon, never red.",
+      "html": "<div class=\"ds-gate\"><div class=\"ds-boxes\"><input maxlength=\"1\" aria-label=\"Character 1\" value=\"B\"><input maxlength=\"1\" aria-label=\"Character 2\"><input maxlength=\"1\" aria-label=\"Character 3\"></div><p class=\"ds-err\"><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"8.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M10 5.5 L10 11\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\"/><circle cx=\"10\" cy=\"14.4\" r=\"1.4\" fill=\"currentColor\"/></svg><span>That code didn't work. Check it with your chapter's merch chair.</span></p></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-gate { display: grid; gap: 16px; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; } .ds-boxes { display: flex; gap: 8px; } .ds-boxes input { width: 52px; height: 60px; text-align: center; font: 700 1.5rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; border: 2px solid var(--ink); border-radius: 4px; background: var(--paper); color: var(--ink); text-transform: uppercase; caret-color: var(--campus-line); } .ds-boxes input:focus { outline: none; border-color: var(--campus-line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--campus-line) 25%, transparent); } .ds-err { margin: 0; display: flex; gap: 8px; align-items: flex-start; color: var(--ink); font-weight: 600; font-size: 0.9375rem; } .ds-err svg { flex: none; margin-top: 1px; }"
+    },
+    {
+      "name": "Campus Dock",
+      "kind": "nav",
+      "refersTo": "dock",
+      "description": "Floating ink pill that switches campus; the active option is a paper pill. The only shadowed element.",
+      "html": "<div class=\"ds-dock\" role=\"group\" aria-label=\"Preview a campus\"><span class=\"ds-dock-l\">Campus</span><button aria-pressed=\"false\"><i style=\"--sw:#ffffff\"></i>Bidd</button><button aria-pressed=\"true\"><i style=\"--sw:#9e1b32\"></i>Alabama</button><button aria-pressed=\"false\"><i style=\"--sw:#14213d\"></i>Ole Miss</button></div>",
+      "css": ":host { --ink: #0b0b0b; --paper: #ffffff; --gray-50: #f5f5f5; --gray-100: #ebebeb; --gray-200: #d9d9d9; --gray-400: #9e9e9e; --gray-600: #6b6b6b; --gray-800: #262626; --dim: #a3a3a3; --campus: #9e1b32; --campus-ink: #ffffff; --campus-line: #9e1b32; --campus-on-dark: #b33242; --campus-2: #828a8f; } .ds-dock { display: inline-flex; align-items: center; gap: 4px; padding: 6px; background: var(--ink); color: var(--paper); border-radius: 999px; border: 1px solid var(--gray-800); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28); font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; } .ds-dock-l { padding: 0 10px 0 14px; color: var(--dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; } .ds-dock button { display: inline-flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--paper); font: 600 0.875rem/1 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; padding: 10px 14px; border-radius: 999px; cursor: pointer; transition: background-color 0.2s; } .ds-dock button:hover { background: var(--gray-800); } .ds-dock button[aria-pressed=\"true\"] { background: var(--paper); color: var(--ink); } .ds-dock button:focus-visible { outline: 2px solid var(--campus-on-dark); outline-offset: 3px; } .ds-dock i { width: 14px; height: 14px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Bidd Frames, Campus Fills",
+    "overview": "Bidd is a drop brand that happens to be a marketplace, played straight in the streetwear and sportswear canon of Nike, Supreme and Depop. Bidd itself is black and white and nothing else. Every hue on screen belongs to the signed-in campus, and it only ever arrives as a fill: the 1 in the logo, drop banners, Closet Cup bars, the active chip, the focus ring. Before sign-in every campus variable falls back to ink and paper, so the brand is complete without a campus and visibly changes when one arrives.\n\nThe voice is loud in one place and quiet everywhere else. Headlines are Archivo Extra Condensed Black Italic in capitals, short and declarative (\"Be 1 of 1.\"). Everything people read is Hanken Grotesk at calm sizes. Pages are built from full-bleed black and white bands with one 1320px column inside, content sits on 4px corners, and every action and chip is a full pill. Depth is flat; the only lifted element is the floating campus dock.\n\nConfirmed rejections: sorority clip-art (pastel pink, script fonts, bows, glitter), a generic startup or SaaS look, anything that reads as an official university department or athletics mark, and cold luxury resale.",
+    "keyCharacteristics": [
+      "Black and white only for Bidd; the campus is the single accent and only ever a fill.",
+      "The B1DD wordmark: outlined condensed black italic letters in ink or paper, the I drawn as a 1 in the campus color.",
+      "Condensed black italic caps for headlines, Hanken Grotesk for reading.",
+      "Full pills for actions and chips, 4px corners for content.",
+      "Flat surfaces; one ambient shadow on the floating dock.",
+      "About 90% ink and paper, about 10% campus on a typical screen."
+    ],
+    "rules": [
+      {
+        "name": "The Bidd Frames, Campus Fills Rule",
+        "body": "Bidd has no accent hue. A campus color appears only as a fill (the 1, banners, Cup bars, active states, focus rings), never as type color for body copy and never as the background of the main action.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rule of the 1",
+        "body": "The 1 must read as a color, not as one more letter. `--campus-line` and `--campus-on-dark` reach at least 3:1 on their ground and sit at least 0.3 OKLab distance from the letters beside them. They are never grey: chroma is raised to a 0.14 floor, hue is kept, and the nearest passing lightness wins. A black or grey campus (chroma under 0.03) has no hue to keep, so its 1 takes the secondary color. `campusColors()` computes all of this; never hand-pick the 1.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Error Rule",
+        "body": "Errors are ink, an icon and a plain sentence that names the fix. Never red: every hue already belongs to some campus. `--destructive` maps to ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Caps Only Rule",
+        "body": "The condensed italic is always uppercase and never sets body copy. Headlines are two to four words, ending on a period when they are a statement.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Families Rule",
+        "body": "Archivo for display and the logo letters, Hanken Grotesk for everything else. No third family, no system display faces.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Effects Rule",
+        "body": "The logo never takes shadows, outlines, gradients or glow, and surfaces stay flat. Shadow is reserved for what genuinely floats.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep Bidd's own palette to ink, paper and the grays; let the campus be the only hue.",
+      "Do draw the 1 with `--campus-line` on white and `--campus-on-dark` on black, computed by `campusColors()`.",
+      "Do set headlines in the condensed black italic caps (line-height 0.86, -0.01em, word-spacing 0.14em), two to four words.",
+      "Do set every reading word, label, button and price in Hanken Grotesk, prices and timers in tabular figures.",
+      "Do flip pills and selected chips to `--campus-ink` fill with `--campus` text on a campus field.",
+      "Do mark black containers `data-ground=\"dark\"` so focus rings switch to `--campus-on-dark`.",
+      "Do use 4px corners on content and full pills on actions and chips.",
+      "Do write errors in ink with an icon and a sentence that names the fix."
+    ],
+    "donts": [
+      "Don't retype the logo, color its letters, stretch it, or add shadows, outlines, gradients or glow.",
+      "Don't give the 1 any color that is not a campus color or ink.",
+      "Don't use red (or any hue) for errors; every hue belongs to some campus.",
+      "Don't make campus the background of the main action or the color of body text.",
+      "Don't set body copy in the condensed italic, or set the italic in lowercase.",
+      "Don't put a small tracked caps kicker or eyebrow above headlines; section heads are a display headline and a lead paragraph.",
+      "Don't set Bidd beside a university logo, chapter letters or crests.",
+      "Don't drift toward pastel sorority clip-art, script fonts, generic startup styling, university-official marks or cold luxury resale."
+    ]
+  }
+}

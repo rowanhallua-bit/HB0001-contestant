@@ -1,0 +1,12 @@
+{
+  "name": "bidd-shots",
+  "private": true,
+  "type": "module",
+  "description": "Screenshot matrix for the Bidd storefront lab (pages x campuses x states x widths).",
+  "scripts": {
+    "matrix": "node matrix.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}
