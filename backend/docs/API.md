@@ -1,0 +1,178 @@
+# Bidd API (for the frontend)
+
+Base URL: `http://localhost:3000` locally (Vercel URL later). All bodies are JSON. Shared Zod schemas and
+TypeScript types live in [`lib/contracts/auth.ts`](../lib/contracts/auth.ts): copy or import them instead of
+retyping shapes.
+
+## Conventions
+
+- **Auth:** after sign-in, send `Authorization: Bearer <accessToken>` on every call. No cookies.
+- **Errors** always look like `{ "error": { "code": "school_not_supported", "message": "Bidd isn't at your school yet..." } }`.
+  Show `message` to the user and branch on `code`.
+- **CORS:** only origins in `FRONTEND_ORIGINS` (e.g. `http://localhost:3001`) may call the API from a browser.
+- **The server owns the truth.** Campus, roles, prices, points and statuses are never taken from the client.
+  Extra fields like `campus_id` in a body are ignored.
+- **Tokens expire after 1 hour.** Refresh with `/api/auth/refresh` a little before `session.expiresAt` (Unix seconds).
+
+## Sign-up / sign-in flow
+
+1. `POST /api/auth/request-code` with the school email. The student gets a code by email.
+2. `POST /api/auth/verify-code` with the email + code. You get a `session`.
+3. `GET /api/me`. If `user.onboarded` is false, show onboarding.
+4. `GET /api/organizations` for the chapter picker, then `POST /api/onboarding`.
+
+New and returning students use the same two calls; there is no separate "sign up".
+
+---
+
+### `POST /api/auth/request-code`
+
+```json
+{ "email": "jdoe@crimson.ua.edu", "captchaToken": "<turnstile token, once CAPTCHA is on>" }
+```
+
+`200`
+```json
+{ "sent": true, "message": "Check your school inbox for a code. It expires in 10 minutes.",
+  "campus": { "name": "The University of Alabama", "shortName": "Alabama" } }
+```
+
+| Status | `code` | When |
+|---|---|---|
+| 400 | `invalid_email` | Not a valid address |
+| 400 | `school_not_supported` | Domain isn't an exact match for a Bidd campus (`crimson.ua.edu.evil.com` fails) |
+| 400 | `captcha_failed` | Turnstile token missing/invalid (once CAPTCHA is enabled) |
+| 429 | `rate_limited` | Too many requests, or asked again within 60 seconds |
+| 503 | `email_delivery_unavailable` | Custom SMTP isn't set up yet |
+
+Supported domains today: `crimson.ua.edu`, `ua.edu` (Alabama), `go.olemiss.edu`, `olemiss.edu` (Ole Miss).
+
+### `POST /api/auth/verify-code`
+
+```json
+{ "email": "jdoe@crimson.ua.edu", "code": "123456" }
+```
+
+`200`
+```json
+{ "session": { "accessToken": "...", "refreshToken": "...", "expiresAt": 1792260000, "tokenType": "bearer" },
+  "needsOnboarding": true }
+```
+
+Errors: `400 invalid_code` (wrong/expired), `429 rate_limited`, `403 school_not_supported`.
+
+### `POST /api/auth/refresh`
+
+```json
+{ "refreshToken": "..." }
+```
+`200` → `{ "session": { ... } }` · `401 invalid_refresh_token` → send the user back to sign-in.
+
+### `POST /api/auth/logout`  (Bearer)
+
+`200` → `{ "ok": true }`. Drop the tokens client-side too.
+
+### `GET /api/me`  (Bearer)
+
+```json
+{
+  "user": { "id": "uuid", "email": "jdoe@crimson.ua.edu", "displayName": "Jamie", "role": "student", "onboarded": true },
+  "campus": { "id": "uuid", "slug": "ua", "name": "The University of Alabama", "shortName": "Alabama",
+              "conference": "SEC", "theme": { "name": "crimson", "primary": "#9E1B32", "secondary": "#828A8F", "accent": "#FFFFFF" } },
+  "memberships": [ { "id": "uuid", "status": "pending", "role": "member", "requestedAt": "...",
+                     "organization": { "id": "uuid", "name": "Kappa Delta", "kind": "sorority" } } ],
+  "badges": [ { "id": "school_email_verified", "label": "School email verified" } ]
+}
+```
+
+Theme the UI from `campus.theme`. Show the badge text exactly as given ("School email verified", not "verified student").
+
+Errors: `401 unauthenticated` / `401 invalid_token` → sign in again; `403 account_suspended`.
+
+### `GET /api/organizations`  (Bearer)
+
+Chapters on the caller's campus only.
+```json
+{ "organizations": [ { "id": "uuid", "name": "Alpha Chi Omega", "nationalOrg": "Alpha Chi Omega", "kind": "sorority" } ] }
+```
+
+### `POST /api/onboarding`  (Bearer)
+
+```json
+{ "displayName": "Jamie", "organizationId": "uuid (optional)" }
+```
+`200` → `{ "ok": true, "chapterRequest": { "organizationId": "uuid", "status": "pending" } }`
+
+Picking a chapter is a **request**: it shows as `pending` until an officer approves it. Can be called again to
+change the display name.
+
+Errors: `400 invalid_request` (name rules), `400 organization_not_found` (not a chapter on your campus),
+`409 chapter_already_requested`.
+
+### `GET /api/health`
+
+`200 { "ok": true, "checks": { "env": "ok", "database": "ok" } }` or `503` with the failing check.
+
+---
+
+## Listings, photos and the campus feed
+
+Shared schemas/types: [`lib/contracts/listings.ts`](../lib/contracts/listings.ts) (`LISTING_TAGS`, `LISTING_SIZES`,
+`LISTING_CONDITIONS`, request schemas, response types). Every route below needs the Bearer token.
+
+**Selling flow:** create a draft → upload 1–6 photos → `PATCH { "status": "active" }` to publish.
+
+- Prices are **whole cents**, $1.00–$1,000.00 (`priceCents: 4500` = $45).
+- Tags: `rush`, `bid_day`, `gameday`, `formal`. Sizes: `XXS`–`XXL`, `0`–`14`, `ONE_SIZE`.
+  Conditions: `new_with_tags`, `like_new`, `good`, `fair`.
+- Statuses: `draft` (only the seller sees it) → `active` (campus feed) → `reserved` / `sold` (set by checkout, Phase 3)
+  or `removed`. The client can only set `active`, `draft` or `removed`.
+- Photo URLs are **signed and expire after ~10 minutes**. Re-fetch the listing/feed instead of caching them.
+- Everything is campus-locked: another school's listing is a `404`, even by ID.
+
+### `GET /api/listings` — campus feed
+Query: `tag`, `size`, `minPriceCents`, `maxPriceCents`, `limit` (1–48, default 24), `cursor`.
+```json
+{ "listings": [ { "id": "uuid", "title": "Gameday overalls", "priceCents": 4500, "size": "S", "condition": "like_new",
+                  "tags": ["gameday"], "brand": null, "status": "active", "publishedAt": "...",
+                  "coverUrl": "https://...signed...", "seller": { "id": "uuid", "displayName": "Jamie" } } ],
+  "nextCursor": "opaque-string-or-null" }
+```
+Next page: same query plus `cursor=<nextCursor>`. `null` means the end.
+
+### `POST /api/listings` — create a draft
+```json
+{ "title": "Crimson rush dress", "description": "Worn once", "brand": "Lulus",
+  "priceCents": 4500, "size": "S", "condition": "like_new", "tags": ["rush"] }
+```
+`201` → `{ "listing": ListingDetail }`. Errors: `400 invalid_request`, `429 rate_limited` (20/hour).
+
+### `GET /api/listings/:id`
+`200` → `{ "listing": ListingDetail }` (adds `description`, `photos[]`, `isOwner`, `createdAt`, `updatedAt`). `404 listing_not_found`.
+
+### `PATCH /api/listings/:id` — seller only
+Any subset of the create fields, plus `status`: `"active"` (publish), `"draft"` (unpublish) or `"removed"`.
+Errors: `404 listing_not_found` (not yours), `409 listing_needs_photo`, `409 listing_locked` (reserved/sold/removed).
+
+### `POST /api/listings/:id/media` — upload one photo (seller only)
+`multipart/form-data` with the file in field **`photo`**. JPEG, PNG or WebP, max **4 MB**, max **6 per listing**.
+The server re-encodes it to WebP (max 1600px) and **strips all metadata, including GPS location**.
+```js
+const form = new FormData();
+form.append("photo", file);
+await fetch(`${API}/api/listings/${id}/media`, { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form });
+```
+`201` → `{ "photo": { "id", "position", "url", "width", "height" } }`.
+Errors: `400 invalid_image`, `413 photo_too_large`, `409 too_many_photos`, `429 rate_limited` (60/hour).
+
+### `DELETE /api/listings/:id/media/:photoId` — seller only
+`200 { "ok": true }`. `409 listing_needs_photo` if it's the last photo of a published listing.
+
+### `GET /api/me/listings`
+The caller's listings, drafts included: `{ "listings": ListingSummary[] }`.
+
+---
+
+## Testing without the product UI
+
+`http://localhost:3000/dev` is a bare click-through of the whole flow (hidden on the production deployment).
