@@ -18,6 +18,8 @@ scores points for their chapter in the **Closet Cup**.
 - Security model: [`backend/docs/SECURITY.md`](backend/docs/SECURITY.md)
 - Keys & account setup: [`backend/docs/KEYS.md`](backend/docs/KEYS.md)
 - Going live: [`backend/docs/LAUNCH.md`](backend/docs/LAUNCH.md)
+- **Building the frontend:** [`handoff/BACKEND_BRIEF.md`](handoff/BACKEND_BRIEF.md) (give this to your AI), plus ready-made
+  prompts for [ChatGPT](handoff/PROMPT_CHATGPT.md) (mock-data UI) and [Claude Code](handoff/PROMPT_CLAUDE.md) (graphics + live wiring)
 
 ## What works today
 
