@@ -42,7 +42,7 @@ export const POST = handle(async (req) => {
     options: { shouldCreateUser: true, captchaToken: body.captchaToken },
   });
   if (error) {
-    console.error("[request-code] supabase rejected send", error.code, error.status);
+    console.error("[request-code] supabase rejected send", error.code, error.status, error.message);
     throw mapSendError(error);
   }
 

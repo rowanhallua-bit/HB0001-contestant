@@ -20,13 +20,13 @@ function errorResponse(status: number, code: string, message: string): NextRespo
   return NextResponse.json({ error: { code, message } }, { status });
 }
 
-type Handler = (req: NextRequest) => Promise<Response>;
+type Handler<C> = (req: NextRequest, ctx: C) => Promise<Response>;
 
 /** Wraps a route so every failure becomes `{ error: { code, message } }` and internals are never leaked. */
-export function handle(fn: Handler): Handler {
-  return async (req) => {
+export function handle<C = unknown>(fn: Handler<C>): Handler<C> {
+  return async (req, ctx) => {
     try {
-      return await fn(req);
+      return await fn(req, ctx);
     } catch (err) {
       if (err instanceof ApiError) return errorResponse(err.status, err.code, err.message);
       console.error("[api] unhandled error", req.method, req.nextUrl.pathname, err);

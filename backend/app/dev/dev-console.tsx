@@ -3,6 +3,14 @@
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MeResponse, OrganizationsResponse, Session } from "@/lib/contracts/auth";
+import {
+  LISTING_CONDITIONS,
+  LISTING_SIZES,
+  LISTING_TAGS,
+  type FeedResponse,
+  type ListingDetail,
+  type ListingSummary,
+} from "@/lib/contracts/listings";
 
 type Turnstile = {
   render: (el: HTMLElement, opts: { sitekey: string; callback: (token: string) => void; "expired-callback": () => void }) => string;
@@ -29,6 +37,10 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
   const [displayName, setDisplayName] = useState("");
   const [orgId, setOrgId] = useState("");
   const [log, setLog] = useState<LogEntry[]>([]);
+  const [draft, setDraft] = useState({ title: "", price: "", size: "M", condition: "like_new", tags: [] as string[] });
+  const [listing, setListing] = useState<ListingDetail | null>(null);
+  const [feed, setFeed] = useState<ListingSummary[]>([]);
+  const [feedTag, setFeedTag] = useState("");
   const widgetRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
@@ -102,6 +114,55 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
     if (r.ok) setSession((r.body as { session: Session }).session);
   }
 
+  async function createListing() {
+    if (!session) return;
+    const r = await call("create listing", "/api/listings", {
+      method: "POST",
+      token: session.accessToken,
+      body: {
+        title: draft.title,
+        priceCents: Math.round(Number(draft.price) * 100),
+        size: draft.size,
+        condition: draft.condition,
+        tags: draft.tags,
+      },
+    });
+    if (r.ok) setListing((r.body as { listing: ListingDetail }).listing);
+  }
+
+  async function reloadListing(id = listing?.id) {
+    if (!session || !id) return;
+    const r = await call("listing", `/api/listings/${id}`, { token: session.accessToken });
+    if (r.ok) setListing((r.body as { listing: ListingDetail }).listing);
+  }
+
+  async function uploadPhoto(file: File) {
+    if (!session || !listing) return;
+    const form = new FormData();
+    form.append("photo", file);
+    const res = await fetch(`/api/listings/${listing.id}/media`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.accessToken}` },
+      body: form,
+    });
+    const body: unknown = await res.json().catch(() => null);
+    setLog((l) => [{ at: new Date().toLocaleTimeString(), label: "upload photo", status: res.status, body }, ...l].slice(0, 30));
+    await reloadListing();
+  }
+
+  async function setStatus(status: "active" | "draft" | "removed") {
+    if (!session || !listing) return;
+    const r = await call(`set ${status}`, `/api/listings/${listing.id}`, { method: "PATCH", token: session.accessToken, body: { status } });
+    if (r.ok) setListing((r.body as { listing: ListingDetail }).listing);
+  }
+
+  async function loadFeed() {
+    if (!session) return;
+    const qs = feedTag ? `?tag=${feedTag}` : "";
+    const r = await call("feed", `/api/listings${qs}`, { token: session.accessToken });
+    if (r.ok) setFeed((r.body as FeedResponse).listings);
+  }
+
   async function logout() {
     if (!session) return;
     await call("logout", "/api/auth/logout", { method: "POST", token: session.accessToken });
@@ -121,8 +182,15 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
       <section style={box}>
         <h2>1. Request a code</h2>
         <input style={input} type="email" placeholder="you@crimson.ua.edu" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <button onClick={requestCode} disabled={!email}>Send code</button>
-        {turnstileSiteKey ? <div ref={widgetRef} style={{ marginTop: 8 }} /> : <p><small>No Turnstile site key: sending without CAPTCHA.</small></p>}
+        <button onClick={requestCode} disabled={!email || (turnstileSiteKey !== null && !captchaToken)}>Send code</button>
+        {turnstileSiteKey ? (
+          <>
+            <div ref={widgetRef} style={{ marginTop: 8 }} />
+            <p><small>{captchaToken ? "Bot check passed. You can send." : "Wait for the bot check to pass before sending."}</small></p>
+          </>
+        ) : (
+          <p><small>No Turnstile site key: sending without CAPTCHA.</small></p>
+        )}
       </section>
 
       <section style={box}>
@@ -158,6 +226,64 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
           ))}
         </select>
         <button onClick={onboard} disabled={!session || displayName.trim().length < 2}>Save</button>
+      </section>
+
+      <section style={box}>
+        <h2>5. Sell</h2>
+        <input style={input} placeholder="Title" value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
+        <input style={{ ...input, minWidth: 80, width: 80 }} placeholder="$ price" inputMode="decimal" value={draft.price} onChange={(e) => setDraft({ ...draft, price: e.target.value })} />
+        <select value={draft.size} onChange={(e) => setDraft({ ...draft, size: e.target.value })} style={{ padding: 6, marginRight: 8 }}>
+          {LISTING_SIZES.map((s) => <option key={s}>{s}</option>)}
+        </select>
+        <select value={draft.condition} onChange={(e) => setDraft({ ...draft, condition: e.target.value })} style={{ padding: 6 }}>
+          {LISTING_CONDITIONS.map((c) => <option key={c}>{c}</option>)}
+        </select>
+        <div style={{ margin: "8px 0" }}>
+          {LISTING_TAGS.map((t) => (
+            <label key={t} style={{ marginRight: 12 }}>
+              <input
+                type="checkbox"
+                checked={draft.tags.includes(t)}
+                onChange={(e) => setDraft({ ...draft, tags: e.target.checked ? [...draft.tags, t] : draft.tags.filter((x) => x !== t) })}
+              />{" "}
+              {t}
+            </label>
+          ))}
+        </div>
+        <button onClick={createListing} disabled={!session || draft.title.trim().length < 3 || !draft.price}>Create draft</button>
+        {listing && (
+          <div style={{ marginTop: 10 }}>
+            <strong>{listing.title}</strong> · ${(listing.priceCents / 100).toFixed(2)} · {listing.size} · <em>{listing.status}</em>
+            <div style={{ display: "flex", gap: 6, margin: "8px 0", flexWrap: "wrap" }}>
+              {listing.photos.map((p) => p.url && <img key={p.id} src={p.url} alt="" width={90} height={90} style={{ objectFit: "cover", borderRadius: 4 }} />)}
+            </div>
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => e.target.files?.[0] && uploadPhoto(e.target.files[0])} />{" "}
+            <button onClick={() => setStatus("active")}>Publish</button>{" "}
+            <button onClick={() => setStatus("draft")}>Unpublish</button>{" "}
+            <button onClick={() => setStatus("removed")}>Remove</button>
+          </div>
+        )}
+      </section>
+
+      <section style={box}>
+        <h2>6. Campus feed</h2>
+        <select value={feedTag} onChange={(e) => setFeedTag(e.target.value)} style={{ padding: 6, marginRight: 8 }}>
+          <option value="">All tags</option>
+          {LISTING_TAGS.map((t) => <option key={t}>{t}</option>)}
+        </select>
+        <button onClick={loadFeed} disabled={!session}>Load feed</button>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 10, marginTop: 10 }}>
+          {feed.map((l) => (
+            <div key={l.id} style={{ border: "1px solid #ddd", borderRadius: 6, padding: 6 }}>
+              {l.coverUrl ? <img src={l.coverUrl} alt="" style={{ width: "100%", aspectRatio: "1", objectFit: "cover", borderRadius: 4 }} /> : <div style={{ aspectRatio: "1", background: "#eee" }} />}
+              <div style={{ fontSize: 13 }}>
+                <strong>{l.title}</strong>
+                <br />${(l.priceCents / 100).toFixed(2)} · {l.size}
+                <br /><small>{l.seller.displayName ?? "Student"}</small>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section style={box}>

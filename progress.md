@@ -88,14 +88,17 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [x] `docs/API.md` auth section + shared Zod types in `lib/contracts/auth.ts` for Quinn
 
 ### Phase 2 — Listings & feed (target: ~2:15)
-- [ ] Migration 002: `closets`, `listings`, `listing_media` (+ RLS: same-campus only, owner writes)
-- [ ] Private Storage bucket, server-validated image upload (JPEG/PNG/WebP, size cap, EXIF strip), short-lived signed URLs
-- [ ] `GET /api/listings` (filters: tags Rush/Bid Day/Gameday/Formal, cursor pagination), `GET /api/listings/:id`
-- [ ] `POST /api/listings`, `PATCH /api/listings/:id`
-- [ ] `POST /api/ai-listing` (Claude vision → editable draft, optional, per-user quota)
-- [ ] Seed listings from Rowan's sheet
+- [x] Migration 002 applied (`supabase/migrations/20261017143000_listings_and_media.sql`): `closets`, `listings`, `listing_media`, private `listing-media` bucket. RLS: own campus only, drafts seller-only, SELECT-only; triggers pin listings to the seller's campus and cap 6 photos
+- [x] Server-side photo upload (magic-byte check, 4 MB cap, re-encode to WebP ≤1600px, all EXIF/GPS stripped), 10-minute signed URLs
+- [x] `GET /api/listings` (filters: tag, size, price range; cursor pagination), `GET /api/listings/:id`, `GET /api/me/listings`
+- [x] `POST /api/listings`, `PATCH /api/listings/:id` (publish needs a photo; sold/reserved server-only), `POST/DELETE` photos
+- [x] `/dev` Sell + Campus feed sections; `docs/API.md` listings section; `lib/contracts/listings.ts`
+- [x] Listing security tests (`tests/security/listings.test.mjs`): **full suite 33/33 green** against the real project
+- [ ] `POST /api/ai-listing` — deferred (no Anthropic key)
+- [ ] Seed listings from Rowan's sheet — waiting on the sheet
 
-### Phase 3 — Buy + QR handoff (target: 3:00 freeze)
+### Phase 3 — Buy + QR handoff — **SKIPPED for the demo/pilot** (see decisions log)
+Frontend Buy button shows "Payments aren't available yet". The items below stay as the post-pilot plan.
 - [ ] Migration 003: `orders`, `inventory_reservations`, `payment_events`, `handoff_tokens`
 - [ ] `POST /api/checkout` — server price + buyer fee (5% + $0.50), atomic reservation, Stripe sandbox Checkout (or clearly-labeled mock)
 - [ ] `POST /api/stripe/webhook` — signature check, idempotent by event ID
@@ -120,6 +123,7 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - **2026-10-17** — One Supabase project for today (hackathon). Demo login gated by `DEMO_MODE` and off in production.
 
 - **2026-10-17** — Vercel hosting on hold (plan doesn't support collaborative projects). Develop and test on `localhost:3000`; GitHub is for code only.
+- **2026-10-17** — Phase 3 (payments, checkout, QR handoff) is out of scope for the demo/pilot. No Stripe. The frontend's checkout shows a "payments aren't a feature yet" message; no backend endpoint. Proposed for Phase 4: seller "Mark as sold" after the in-person swap, which feeds the Closet Cup (pending Rouan's OK).
 - **2026-10-17** — Local Node 22 on Rouan's machine via fnm + `node22.cmd` launcher (system Node 12 can't be removed without admin).
 
 ## Blockers / waiting on Rouan
@@ -133,3 +137,6 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - **~11:50** — Commit author fixed to Rouan (history rewritten + force-pushed while repo was fresh). Created `backend/supabase/`, wrote `docs/OVERVIEW.md`. Waiting on Rouan's go-ahead on the big picture.
 - **~1:30** — Backend skeleton built: Next.js 16 API, env validation, Supabase clients, CORS proxy, rate limits, auth guard, all Phase 1 routes, `/dev` page, migration 001 + seed, security + unit tests, `docs/API.md`. Typecheck + production build pass; `/api/health` OK against the real project (database `not_migrated` until the SQL is applied). Next: apply SQL → dashboard switches → `npm run test:security` → real code email test.
 - **~1:50** — Rouan applied migration 001 + seed, enabled the hook, code email templates and CAPTCHA. Security suite 17/17 green. Remaining for Phase 1: real inbox test (Resend SMTP, or invite own .edu to the Supabase team), push branch + PR for Quinn.
+- **~2:40** — Phase 1 done end to end with a real `@crimson.ua.edu` inbox: Resend domain `bidd.day` verified, "Confirm sign up" template switched to the code (it still had the default link, which also tripped UA's spam filter). PR #1 open.
+- **~2:45** — Phase 2 built on `rouan/listings`: migration 002, listing/photo/feed routes, `/dev` sell + feed, tests, docs. Typecheck + build pass. Waiting on migration 002 to run the listing tests.
+- **~3:00** — Migration 002 applied; security suite 33/33 green (17 auth + 16 listings); no test leftovers. Phase 3 skipped for the pilot. Next: Phase 4 (Closet Cup + "Mark as sold", reports).
