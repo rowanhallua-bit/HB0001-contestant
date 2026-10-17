@@ -202,6 +202,45 @@ Errors: `400 invalid_handoff` (bad token, or you're not this order's seller), `4
 
 ---
 
+## Closet Cup, chapters, reports and blocks
+
+Shared types: [`lib/contracts/community.ts`](../lib/contracts/community.ts).
+
+### `GET /api/cup`
+Aggregates only (no buyers or sellers):
+```json
+{ "campus": { "id": "uuid", "name": "The University of Alabama",
+              "standings": [ { "rank": 1, "organizationId": "uuid", "name": "Kappa Delta", "kind": "sorority", "points": 40, "sales": 4 } ] },
+  "conference": [ { "rank": 1, "campusId": "uuid", "name": "...", "shortName": "Alabama", "points": 120, "sales": 12, "isYourCampus": true } ] }
+```
+Scoring: each completed QR handoff gives **10 points** to the seller's **approved** chapter. Pending requests don't score.
+
+### Chapter officers
+- `GET /api/chapter/requests`: pending join requests for chapters where you're an approved officer (empty otherwise).
+- `POST /api/chapter/requests/:id` `{ "approve": true | false }` → `200`. `404 request_not_found` if you're not an officer
+  of that chapter, `409 request_not_pending` if already decided.
+
+**Making the first officer** (run once per chapter in the Supabase SQL editor, after that person picked the chapter in onboarding):
+```sql
+update public.organization_memberships
+   set status = 'active', role = 'officer', decided_at = now()
+ where user_id = (select id from public.profiles where email = 'officer@crimson.ua.edu');
+```
+
+### `POST /api/listings/:id/report`
+`{ "reason": "prohibited_item" | "scam_or_fraud" | "offensive" | "wrong_item" | "other", "details": "optional, ≤500 chars" }`
+→ `200 { "ok": true, "hidden": false }`. One report per student per listing; **3 different students hide it**.
+Errors: `404` (not your campus), `409 cannot_report_own_listing`.
+
+### Blocks
+`GET /api/blocks` → `{ "blockedUserIds": [] }` · `POST /api/blocks { "userId": "uuid" }` · `DELETE /api/blocks/:userId`.
+Blocked sellers' listings disappear from your feed. Use `listing.seller.id` from the feed.
+
+### `POST /api/admin/listings/:id/remove` (campus admins)
+Admins are set in the database (`profiles.role = 'admin'`), never by the client. Only works on the admin's own campus.
+
+---
+
 ## Testing without the product UI
 
 `http://localhost:3000/dev` is a bare click-through of the whole flow (hidden on the production deployment).

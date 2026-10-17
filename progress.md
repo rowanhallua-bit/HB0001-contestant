@@ -106,14 +106,20 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [x] Order security tests (`tests/security/orders.test.mjs`): **full suite 44/44 green**
 - [ ] Post-pilot: Stripe Checkout + webhook, chapter closet access codes + drops
 
-### Phase 4 — Closet Cup & polish (3:00–4:00)
-- [ ] `cup_events` + sanitized aggregate `GET /api/cup` (campus view + SEC view)
-- [ ] Reports / block / remove listing basics
-- [ ] Final security pass (RLS advisor, acceptance tests), production env check (no demo mode)
+### Phase 4 — Closet Cup & moderation (light)
+- [x] Migration 004 applied (`supabase/migrations/20261017160000_cup_and_moderation.sql`): `cup_events`, `reports`, `blocks`; `confirm_handoff` now awards 10 pts to the seller's **approved** chapter (once per order); aggregate standings functions; officer approval + report functions
+- [x] `GET /api/cup` — campus chapter standings + conference campus totals, aggregates only
+- [x] Chapter officers: `GET /api/chapter/requests`, `POST /api/chapter/requests/:id` (first officer via SQL snippet in `docs/API.md`)
+- [x] `POST /api/listings/:id/report` (3 different students → auto-hidden), blocks (`/api/blocks`, feed hides blocked sellers), `POST /api/admin/listings/:id/remove` (campus admins)
+- [x] Per-IP sign-in limits loosened for campus Wi-Fi (per-email limits unchanged)
+- [x] `/dev` Cup, report/block buttons, officer section; `docs/API.md`; `lib/contracts/community.ts`
+- [x] Community security tests (`tests/security/community.test.mjs`): **full suite 54/54 green**, no test data left behind
+- [x] Final security pass: Supabase Security Advisor 0 errors (1 warning = leaked-password check, n/a: no passwords; 6 notes = intentional server-only tables); git history scanned, no secrets in any commit; `DEMO_MODE` can't start in production
 
-### Phase 5 — Ship (4:00–4:45)
-- [ ] Final Vercel deploy, phone smoke test, both campus logins tested
-- [ ] README for judges
+### Phase 5 — Ship (light: no hosting yet)
+- [x] README for judges/teammates (features, local run, migration order, tests, architecture)
+- [x] `backend/docs/SECURITY.md` (security model + known pilot limits), `backend/docs/LAUNCH.md` (going-live checklist)
+- [!] Vercel deploy, phone smoke test on the public URL — **deferred** (hosting/keys "for another day", see `LAUNCH.md`)
 
 ---
 
@@ -141,3 +147,4 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - **~2:40** — Phase 1 done end to end with a real `@crimson.ua.edu` inbox: Resend domain `bidd.day` verified, "Confirm sign up" template switched to the code (it still had the default link, which also tripped UA's spam filter). PR #1 open.
 - **~2:45** — Phase 2 built on `rouan/listings`: migration 002, listing/photo/feed routes, `/dev` sell + feed, tests, docs. Typecheck + build pass. Waiting on migration 002 to run the listing tests.
 - **~3:00** — Migration 002 applied; security suite 33/33 green (17 auth + 16 listings); no test leftovers. Phase 3 skipped for the pilot. Next: Phase 4 (Closet Cup + "Mark as sold", reports).
+- **~3:05–3:45** — Phases 3–5 built light (no keys, nothing external): pilot checkout + QR handoff (migration 003), Closet Cup + officer approvals + reports + blocks + admin removal (migration 004), README/SECURITY/LAUNCH docs. All 4 migrations applied; **54/54 security tests**, 4/4 unit tests, build green. Branches stacked: `rouan/backend-skeleton` (PR #1) → `rouan/listings` (PR #2) → `rouan/orders` → `rouan/cup-and-moderation`.
