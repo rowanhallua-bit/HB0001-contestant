@@ -92,11 +92,47 @@ test("request-code rejects malformed addresses", async () => {
   assert.equal(res.body.error.code, "invalid_email");
 });
 
-test("Before-User-Created hook blocks look-alike domains inside Supabase itself", async () => {
+test("a look-alike account gets no campus and no data, even if it exists in Supabase", async (t) => {
+  // The Before-User-Created hook guards public sign-ups; the admin API may skip it. Either way the
+  // database must refuse to give a look-alike address a campus.
   const email = `bidd-sectest-${tag()}@crimson.ua.edu.attacker.example`;
   const { data, error } = await admin.auth.admin.createUser({ email, email_confirm: true });
-  if (data?.user) createdUserIds.push(data.user.id);
-  assert.ok(error, "user was created: enable the hook (Auth -> Hooks -> Before User Created -> public.hook_before_user_created)");
+  if (error) {
+    t.diagnostic(`Supabase refused to create the user (${error.message}): hook active on the admin path too`);
+    return;
+  }
+  createdUserIds.push(data.user.id);
+  t.diagnostic("admin API created the user (hook not applied there); checking the database wall");
+
+  const { data: link, error: linkError } = await admin.auth.admin.generateLink({ type: "magiclink", email });
+  if (linkError) throw linkError;
+
+  // Through our API: refused.
+  const viaApi = await api("/api/auth/verify-code", { method: "POST", body: { email, code: link.properties.email_otp } });
+  assert.equal(viaApi.status, 403, JSON.stringify(viaApi.body));
+  assert.equal(viaApi.body.error.code, "school_not_supported");
+
+  // Straight to Supabase with a fresh code: gets a session, but the API and RLS give it nothing.
+  const { data: link2 } = await admin.auth.admin.generateLink({ type: "magiclink", email });
+  const direct = await createClient(SUPABASE_URL, PUBLISHABLE, { auth: noSession }).auth.verifyOtp({
+    email,
+    token: link2.properties.email_otp,
+    type: "email",
+  });
+  if (direct.error) {
+    t.diagnostic(`direct verify refused: ${direct.error.message}`);
+    return;
+  }
+  const token = direct.data.session.access_token;
+  const me = await api("/api/me", { token });
+  assert.equal(me.status, 403);
+  assert.equal(me.body.error.code, "school_not_supported");
+
+  const db = asUser(token);
+  assert.deepEqual((await db.from("organizations").select("id")).data ?? [], []);
+  assert.deepEqual((await db.from("profiles").select("id")).data ?? [], []);
+  const { data: profile } = await admin.from("profiles").select("id").eq("id", data.user.id).maybeSingle();
+  assert.equal(profile, null, "a profile was provisioned for a look-alike address");
 });
 
 // --- Verification + sessions -------------------------------------------------

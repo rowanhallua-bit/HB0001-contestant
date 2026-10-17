@@ -70,10 +70,10 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [!] Deploy skeleton to Vercel (root directory = `backend`) — **on hold**: Rouan's Vercel plan doesn't cover collaborative projects; testing locally for now
 
 ### Phase 1 — Sign-up, verification, account setup (P0, top priority, target: ~1:30)
-- [~] Migration 001 written (`supabase/migrations/20261017130000_identity_and_campus.sql`): `campuses`, `campus_email_domains`, `profiles`, `campus_memberships`, `organizations`, `organization_memberships`, `audit_events`, `private.rate_limits` — RLS on everything, deny by default, SELECT-only policies. **Not applied yet** (paste into SQL editor)
-- [~] Seed written (`supabase/seed.sql`): UA (crimson) + Ole Miss (red/blue), 4 domains, 8 chapters each. **Not applied yet**
-- [~] Before-User-Created hook function `public.hook_before_user_created` written. **Rouan:** enable it in Auth → Hooks
-- [ ] **Rouan:** email templates ("Magic Link" + "Confirm signup") show the code `{{ .Token }}`
+- [x] Migration 001 applied (`supabase/migrations/20261017130000_identity_and_campus.sql`): `campuses`, `campus_email_domains`, `profiles`, `campus_memberships`, `organizations`, `organization_memberships`, `audit_events`, `private.rate_limits` — RLS on everything, deny by default, SELECT-only policies
+- [x] Seed applied (`supabase/seed.sql`): UA (crimson) + Ole Miss (red/blue), 4 domains, 8 chapters each
+- [x] Before-User-Created hook `public.hook_before_user_created` enabled. Note: the admin API skips it, so `provision_user` is the real wall — a look-alike account gets no profile, no campus, no data (tested)
+- [x] Email templates ("Magic Link" + "Confirm signup") show the code `{{ .Token }}`
 - [x] `POST /api/auth/request-code` — normalize email, exact-domain check, rate limit, same response for new/existing accounts
 - [x] `POST /api/auth/verify-code` — verify OTP, provision account, return session (+ `POST /api/auth/refresh`)
 - [x] First verified login creates `profile` + `campus_membership` from the verified email (`provision_user`, service_role only)
@@ -82,9 +82,9 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [x] `POST /api/auth/logout`
 - [x] Rate limits on code requests/verification (per email + per IP, hashed buckets, Postgres counters, fail closed)
 - [ ] Custom SMTP via Resend so codes reach real school inboxes  **← critical path, needs a domain**
-- [~] Turnstile: `/dev` sends the token and the API passes it to Supabase. **Rouan:** turn on CAPTCHA in Supabase Attack Protection with the Turnstile secret
+- [x] Turnstile CAPTCHA on in Supabase; `/dev` sends the token and the API passes it through. Quinn's sign-in screen must send `captchaToken` too
 - [x] `/dev` test UI: email → code → me → onboarding → refresh/logout
-- [x] Security tests written (`npm run test:security`): unsupported + look-alike domains, hook, wrong code, bad/tampered tokens, forged `campus_id`/role, cross-campus reads by ID, self-edits of role/campus/chapter status, privileged RPCs, anon reads, bad origin. Unit tests pass; security tests need the migration applied
+- [x] Security tests written (`npm run test:security`): unsupported + look-alike domains, hook, wrong code, bad/tampered tokens, forged `campus_id`/role, cross-campus reads by ID, self-edits of role/campus/chapter status, privileged RPCs, anon reads, bad origin. **17/17 security tests + 4/4 unit tests pass against the real project**
 - [x] `docs/API.md` auth section + shared Zod types in `lib/contracts/auth.ts` for Quinn
 
 ### Phase 2 — Listings & feed (target: ~2:15)
@@ -123,8 +123,7 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - **2026-10-17** — Local Node 22 on Rouan's machine via fnm + `node22.cmd` launcher (system Node 12 can't be removed without admin).
 
 ## Blockers / waiting on Rouan
-- Apply migration 001 + seed in the Supabase SQL editor (the Supabase connector is signed in to a different account)
-- Enable the Before-User-Created hook, switch email templates to `{{ .Token }}`, CAPTCHA secret if using Turnstile
+- Future migrations: paste into the Supabase SQL editor (the Supabase connector is signed in to a different account)
 - Quinn added as collaborator on the repo
 - A domain for Resend (needed to email codes to real `.edu` inboxes) — see `backend/docs/KEYS.md`
 
@@ -133,3 +132,4 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - Connected git to https://github.com/rowanhallua-bit/HB0001-contestant and pushed the plan to `main`. Next: Supabase keys → scaffold Next.js in `backend/`.
 - **~11:50** — Commit author fixed to Rouan (history rewritten + force-pushed while repo was fresh). Created `backend/supabase/`, wrote `docs/OVERVIEW.md`. Waiting on Rouan's go-ahead on the big picture.
 - **~1:30** — Backend skeleton built: Next.js 16 API, env validation, Supabase clients, CORS proxy, rate limits, auth guard, all Phase 1 routes, `/dev` page, migration 001 + seed, security + unit tests, `docs/API.md`. Typecheck + production build pass; `/api/health` OK against the real project (database `not_migrated` until the SQL is applied). Next: apply SQL → dashboard switches → `npm run test:security` → real code email test.
+- **~1:50** — Rouan applied migration 001 + seed, enabled the hook, code email templates and CAPTCHA. Security suite 17/17 green. Remaining for Phase 1: real inbox test (Resend SMTP, or invite own .edu to the Supabase team), push branch + PR for Quinn.
