@@ -60,7 +60,7 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 ### Phase 0 — Setup (target: by ~12:00)
 - [x] Plan written, `progress.md` created
 - [x] `backend/` folder, `.gitignore`, `.env.example`, `docs/KEYS.md`
-- [ ] **Rouan:** create GitHub repo + send URL → Claude connects and pushes
+- [x] GitHub repo connected: https://github.com/rowanhallua-bit/HB0001-contestant (`main` pushed)
 - [ ] **Rouan:** add Quinn as collaborator, turn on 2FA
 - [ ] **Rouan:** create Supabase project, put keys in `backend/.env.local` (see `backend/docs/KEYS.md`)
 - [ ] Scaffold Next.js + TypeScript in `backend/`, install `@supabase/supabase-js`, `@supabase/ssr`, `zod`
@@ -118,9 +118,10 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - **2026-10-17** — One Supabase project for today (hackathon). Demo login gated by `DEMO_MODE` and off in production.
 
 ## Blockers / waiting on Rouan
-- GitHub repo URL
 - Supabase project keys
+- Quinn added as collaborator on the repo
 - A domain for Resend (needed to email codes to real `.edu` inboxes) — see `backend/docs/KEYS.md`
 
 ## Session log
 - **~11:30** — Read gameplan/vision/build. Wrote this plan, created `backend/` with keys guide and env template. Waiting on GitHub repo + Supabase keys to start Phase 0 scaffolding.
+- Connected git to https://github.com/rowanhallua-bit/HB0001-contestant and pushed the plan to `main`. Next: Supabase keys → scaffold Next.js in `backend/`.
