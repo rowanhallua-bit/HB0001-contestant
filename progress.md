@@ -98,12 +98,12 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [ ] Seed listings from Rowan's sheet — waiting on the sheet
 
 ### Phase 3 — Buy + QR handoff — **light pilot version, no payments, nothing external connected**
-- [~] Migration 003 written (`supabase/migrations/20261017153000_orders_and_handoffs.sql`): `orders`, `private.handoff_tokens` (hashes only), locked state-change functions (`create_order`, `create_handoff_token`, `confirm_handoff`, `cancel_order`), RLS buyer/seller-only. **Rouan: paste into the SQL editor**
+- [x] Migration 003 applied (`supabase/migrations/20261017153000_orders_and_handoffs.sql`): `orders`, `private.handoff_tokens` (hashes only), locked state-change functions (`create_order`, `create_handoff_token`, `confirm_handoff`, `cancel_order`), RLS buyer/seller-only
 - [x] `POST /api/checkout` — reserves the listing atomically; server price + display-only buyer fee (5% + $0.50); `payment.collected: false` with the "pay in person" notice
 - [x] `GET /api/orders`, `POST /api/orders/:id/cancel` (listing goes back on the feed)
 - [x] `POST /api/orders/:id/handoff-token` (buyer, single use, 15 min, older tokens revoked), `POST /api/handoffs/confirm` (seller only) → order completed, listing sold
 - [x] `/dev` Buy buttons + Orders/handoff section; `docs/API.md` checkout section; `lib/contracts/orders.ts`
-- [~] Order security tests written (`tests/security/orders.test.mjs`) — run after migration 003
+- [x] Order security tests (`tests/security/orders.test.mjs`): **full suite 44/44 green**
 - [ ] Post-pilot: Stripe Checkout + webhook, chapter closet access codes + drops
 
 ### Phase 4 — Closet Cup & polish (3:00–4:00)
