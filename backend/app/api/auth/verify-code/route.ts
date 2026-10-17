@@ -15,7 +15,8 @@ export const POST = handle(async (req) => {
   if (!email) throw new ApiError(400, "invalid_email", "Enter a valid school email address.");
 
   await enforceRateLimit([
-    { bucket: `verify-code:ip:${clientIp(req)}`, max: 30, windowSeconds: 600 },
+    // Per-IP is loose (campus Wi-Fi puts many students behind one IP); per-email is the tight limit.
+    { bucket: `verify-code:ip:${clientIp(req)}`, max: 200, windowSeconds: 600 },
     { bucket: `verify-code:email:${email}`, max: 10, windowSeconds: 600 },
   ]);
 
