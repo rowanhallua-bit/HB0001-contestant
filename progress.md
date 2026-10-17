@@ -59,7 +59,9 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 
 ### Phase 0 — Setup (target: by ~12:00)
 - [x] Plan written, `progress.md` created
-- [x] `backend/` folder, `.gitignore`, `.env.example`, `docs/KEYS.md`
+- [x] `backend/` folder, `.gitignore`, `.env.example`, `docs/KEYS.md`, `docs/OVERVIEW.md` (big picture)
+- [x] `backend/supabase/` initialized (`config.toml`: 6-digit codes, 10-min expiry, 60s resend; `migrations/` ready)
+- [x] Git author set to Rouan for this repo
 - [x] GitHub repo connected: https://github.com/rowanhallua-bit/HB0001-contestant (`main` pushed)
 - [ ] **Rouan:** add Quinn as collaborator, turn on 2FA
 - [ ] **Rouan:** create Supabase project, put keys in `backend/.env.local` (see `backend/docs/KEYS.md`)
@@ -125,3 +127,4 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 ## Session log
 - **~11:30** — Read gameplan/vision/build. Wrote this plan, created `backend/` with keys guide and env template. Waiting on GitHub repo + Supabase keys to start Phase 0 scaffolding.
 - Connected git to https://github.com/rowanhallua-bit/HB0001-contestant and pushed the plan to `main`. Next: Supabase keys → scaffold Next.js in `backend/`.
+- **~11:50** — Commit author fixed to Rouan (history rewritten + force-pushed while repo was fresh). Created `backend/supabase/`, wrote `docs/OVERVIEW.md`. Waiting on Rouan's go-ahead on the big picture.
