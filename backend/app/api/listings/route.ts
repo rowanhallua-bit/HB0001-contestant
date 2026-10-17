@@ -44,6 +44,11 @@ export const GET = handle(async (req) => {
   if (q.size) query = query.eq("size", q.size);
   if (q.minPriceCents !== undefined) query = query.gte("price_cents", q.minPriceCents);
   if (q.maxPriceCents !== undefined) query = query.lte("price_cents", q.maxPriceCents);
+  // Hide sellers I've blocked. IDs come from the database, so they're safe to inline.
+  const { data: blocks, error: blockError } = await userClient(ctx.accessToken).from("blocks").select("blocked_id");
+  if (blockError) throw blockError;
+  const blocked = ((blocks ?? []) as { blocked_id: string }[]).map((b) => b.blocked_id).filter((id) => UUID.test(id));
+  if (blocked.length) query = query.filter("seller_id", "not.in", `(${blocked.join(",")})`);
   if (q.cursor) {
     const c = decodeCursor(q.cursor);
     query = query.or(`published_at.lt."${c.publishedAt}",and(published_at.eq."${c.publishedAt}",id.lt.${c.id})`);

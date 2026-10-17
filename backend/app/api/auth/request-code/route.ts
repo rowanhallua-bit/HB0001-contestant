@@ -28,7 +28,8 @@ export const POST = handle(async (req) => {
   if (!email) throw new ApiError(400, "invalid_email", "Enter a valid school email address.");
 
   const ip = clientIp(req);
-  await enforceRateLimit([{ bucket: `request-code:ip:${ip}`, max: 20, windowSeconds: 600 }]);
+  // Per-IP is loose (campus Wi-Fi puts many students behind one IP); per-email is the tight limit.
+  await enforceRateLimit([{ bucket: `request-code:ip:${ip}`, max: 100, windowSeconds: 600 }]);
 
   const campus = await findCampusByDomain(emailDomain(email));
   if (!campus) {

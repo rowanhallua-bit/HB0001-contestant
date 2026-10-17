@@ -12,6 +12,7 @@ import {
   type ListingSummary,
 } from "@/lib/contracts/listings";
 import type { HandoffTokenResponse, Order, OrdersResponse } from "@/lib/contracts/orders";
+import type { ChapterRequestsResponse, CupResponse } from "@/lib/contracts/community";
 
 type Turnstile = {
   render: (el: HTMLElement, opts: { sitekey: string; callback: (token: string) => void; "expired-callback": () => void }) => string;
@@ -45,6 +46,8 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
   const [orders, setOrders] = useState<Order[]>([]);
   const [qr, setQr] = useState<Record<string, string>>({});
   const [scanned, setScanned] = useState("");
+  const [cup, setCup] = useState<CupResponse | null>(null);
+  const [requests, setRequests] = useState<ChapterRequestsResponse["requests"]>([]);
   const widgetRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
@@ -198,6 +201,36 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
     await loadOrders();
   }
 
+  async function loadCup() {
+    if (!session) return;
+    const r = await call("cup", "/api/cup", { token: session.accessToken });
+    if (r.ok) setCup(r.body as CupResponse);
+  }
+
+  async function report(listingId: string) {
+    if (!session) return;
+    await call("report", `/api/listings/${listingId}/report`, { method: "POST", token: session.accessToken, body: { reason: "other" } });
+    await loadFeed();
+  }
+
+  async function block(userId: string) {
+    if (!session) return;
+    await call("block", "/api/blocks", { method: "POST", token: session.accessToken, body: { userId } });
+    await loadFeed();
+  }
+
+  async function loadRequests() {
+    if (!session) return;
+    const r = await call("chapter requests", "/api/chapter/requests", { token: session.accessToken });
+    if (r.ok) setRequests((r.body as ChapterRequestsResponse).requests);
+  }
+
+  async function decide(id: string, approve: boolean) {
+    if (!session) return;
+    await call(approve ? "approve" : "reject", `/api/chapter/requests/${id}`, { method: "POST", token: session.accessToken, body: { approve } });
+    await loadRequests();
+  }
+
   async function logout() {
     if (!session) return;
     await call("logout", "/api/auth/logout", { method: "POST", token: session.accessToken });
@@ -317,6 +350,10 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
                 <br /><small>{l.seller.displayName ?? "Student"}</small>
               </div>
               <button onClick={() => buy(l.id)} style={{ marginTop: 4, width: "100%" }}>Buy</button>
+              <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+                <button onClick={() => report(l.id)} style={{ flex: 1, fontSize: 11 }}>Report</button>
+                <button onClick={() => block(l.seller.id)} style={{ flex: 1, fontSize: 11 }}>Block seller</button>
+              </div>
             </div>
           ))}
         </div>
@@ -338,6 +375,41 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
         </ul>
         <input style={input} placeholder="Seller: paste the buyer's QR value" value={scanned} onChange={(e) => setScanned(e.target.value)} />
         <button onClick={confirmHandoff} disabled={!session || scanned.length < 20}>Confirm handoff</button>
+      </section>
+
+      <section style={box}>
+        <h2>8. Closet Cup</h2>
+        <button onClick={loadCup} disabled={!session}>Load standings</button>
+        {cup && (
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginTop: 8 }}>
+            <ol>
+              <strong>{cup.campus.name}</strong>
+              {cup.campus.standings.map((c) => (
+                <li key={c.organizationId}>{c.name}: {c.points} pts ({c.sales} sales)</li>
+              ))}
+            </ol>
+            <ol>
+              <strong>Conference</strong>
+              {cup.conference.map((c) => (
+                <li key={c.campusId} style={{ fontWeight: c.isYourCampus ? 700 : 400 }}>{c.shortName}: {c.points} pts</li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </section>
+
+      <section style={box}>
+        <h2>9. Chapter officer</h2>
+        <p><small>Only approved officers see requests. Make the first officer with the SQL in docs/API.md.</small></p>
+        <button onClick={loadRequests} disabled={!session}>Load join requests</button>
+        <ul>
+          {requests.map((r) => (
+            <li key={r.id}>
+              {r.user.displayName ?? "Student"} → {r.organization.name}{" "}
+              <button onClick={() => decide(r.id, true)}>Approve</button> <button onClick={() => decide(r.id, false)}>Reject</button>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section style={box}>

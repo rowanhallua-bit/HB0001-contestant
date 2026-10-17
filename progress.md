@@ -106,9 +106,14 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason n
 - [x] Order security tests (`tests/security/orders.test.mjs`): **full suite 44/44 green**
 - [ ] Post-pilot: Stripe Checkout + webhook, chapter closet access codes + drops
 
-### Phase 4 — Closet Cup & polish (3:00–4:00)
-- [ ] `cup_events` + sanitized aggregate `GET /api/cup` (campus view + SEC view)
-- [ ] Reports / block / remove listing basics
+### Phase 4 — Closet Cup & moderation (light)
+- [~] Migration 004 written (`supabase/migrations/20261017160000_cup_and_moderation.sql`): `cup_events`, `reports`, `blocks`; `confirm_handoff` now awards 10 pts to the seller's **approved** chapter (once per order); aggregate standings functions; officer approval + report functions. **Rouan: paste into the SQL editor**
+- [x] `GET /api/cup` — campus chapter standings + conference campus totals, aggregates only
+- [x] Chapter officers: `GET /api/chapter/requests`, `POST /api/chapter/requests/:id` (first officer via SQL snippet in `docs/API.md`)
+- [x] `POST /api/listings/:id/report` (3 different students → auto-hidden), blocks (`/api/blocks`, feed hides blocked sellers), `POST /api/admin/listings/:id/remove` (campus admins)
+- [x] Per-IP sign-in limits loosened for campus Wi-Fi (per-email limits unchanged)
+- [x] `/dev` Cup, report/block buttons, officer section; `docs/API.md`; `lib/contracts/community.ts`
+- [~] Community security tests written (`tests/security/community.test.mjs`) — run after migration 004
 - [ ] Final security pass (RLS advisor, acceptance tests), production env check (no demo mode)
 
 ### Phase 5 — Ship (4:00–4:45)
