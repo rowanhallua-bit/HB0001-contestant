@@ -121,8 +121,15 @@ export default function DevConsole({ turnstileSiteKey }: { turnstileSiteKey: str
       <section style={box}>
         <h2>1. Request a code</h2>
         <input style={input} type="email" placeholder="you@crimson.ua.edu" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <button onClick={requestCode} disabled={!email}>Send code</button>
-        {turnstileSiteKey ? <div ref={widgetRef} style={{ marginTop: 8 }} /> : <p><small>No Turnstile site key: sending without CAPTCHA.</small></p>}
+        <button onClick={requestCode} disabled={!email || (turnstileSiteKey !== null && !captchaToken)}>Send code</button>
+        {turnstileSiteKey ? (
+          <>
+            <div ref={widgetRef} style={{ marginTop: 8 }} />
+            <p><small>{captchaToken ? "Bot check passed. You can send." : "Wait for the bot check to pass before sending."}</small></p>
+          </>
+        ) : (
+          <p><small>No Turnstile site key: sending without CAPTCHA.</small></p>
+        )}
       </section>
 
       <section style={box}>
